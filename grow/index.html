@@ -2,33 +2,53 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For You 🌹</title>
+<title>Our Garden 🌹</title>
 
 <style>
 body{
   margin:0;
   height:100vh;
-  background:linear-gradient(#0f0f14,#1c1c2b);
   overflow:hidden;
   font-family:monospace;
+  background:radial-gradient(circle at bottom,#1c1c2b,#090910);
   color:white;
-  text-align:center;
 }
+
+/* MESSAGE */
 
 #msg{
   position:fixed;
   top:20px;
   width:100%;
-  opacity:.9;
+  text-align:center;
+  opacity:.85;
   z-index:5;
+}
+
+/* FIREFLIES */
+
+.firefly{
+  position:fixed;
+  width:6px;
+  height:6px;
+  background:gold;
+  border-radius:50%;
+  box-shadow:0 0 10px gold;
+  opacity:.7;
+  animation:float 10s linear infinite;
+}
+
+@keyframes float{
+  from{transform:translateY(100vh);}
+  to{transform:translateY(-10vh);}
 }
 
 /* STEM */
 
 .flower{
   position:absolute;
-  width:10px;
-  height:150px;
+  width:8px;
+  height:140px;
   background:linear-gradient(#2e7d32,#1b5e20);
   border-radius:5px;
 }
@@ -37,27 +57,25 @@ body{
 
 .petal{
   position:absolute;
-  width:50px;
-  height:50px;
+  width:48px;
+  height:48px;
   border-radius:50%;
   opacity:0;
   transform:scale(0);
   animation:bloom .6s forwards;
+  filter:blur(.2px);
 }
 
 @keyframes bloom{
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
+  to{opacity:1; transform:scale(1);}
 }
 
 /* CENTER */
 
 .core{
   position:absolute;
-  width:24px;
-  height:24px;
+  width:22px;
+  height:22px;
   background:radial-gradient(circle,#fff3b0,#ffb703);
   border-radius:50%;
   top:-8px;
@@ -66,7 +84,7 @@ body{
   animation:bloom .5s forwards .2s;
 }
 
-/* PETAL FALL */
+/* PETAL RAIN */
 
 @keyframes fall{
   to{
@@ -79,11 +97,24 @@ body{
 
 <body>
 
-<div id="msg">Tap anywhere to grow roses 🌹</div>
+<div id="msg">Tap to grow our garden 🌷</div>
 
 <script>
 let count=0;
 const msg=document.getElementById("msg");
+
+/* Fireflies */
+
+setInterval(()=>{
+  const f=document.createElement("div");
+  f.className="firefly";
+  f.style.left=Math.random()*100+"vw";
+  f.style.animationDuration=(8+Math.random()*6)+"s";
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),14000);
+},900);
+
+/* Flower colors */
 
 const colors=[
  ["#ff4d6d","#c9184a"],
@@ -101,26 +132,24 @@ function grow(x,y){
 
  const f=document.createElement("div");
  f.className="flower";
- f.style.left=(x-5)+"px";
- f.style.top=(y-150)+"px";
+ f.style.left=(x-4)+"px";
+ f.style.top=(y-140)+"px";
 
  const petals=8;
- const radius=25;
+ const r=24;
 
  for(let i=0;i<petals;i++){
-   const p=document.createElement("div");
-   p.className="petal";
+  const p=document.createElement("div");
+  p.className="petal";
 
-   const angle=(i/petals)*360;
-   const rad=angle*Math.PI/180;
+  const a=(i/petals)*360*Math.PI/180;
+  p.style.left=(Math.cos(a)*r-20)+"px";
+  p.style.top=(Math.sin(a)*r-38)+"px";
+  p.style.background=
+   `radial-gradient(circle,${color[0]},${color[1]})`;
+  p.style.animationDelay=(i*.05)+"s";
 
-   p.style.left=(Math.cos(rad)*radius-20)+"px";
-   p.style.top=(Math.sin(rad)*radius-40)+"px";
-   p.style.background=
-     `radial-gradient(circle,${color[0]},${color[1]})`;
-   p.style.animationDelay=(i*.05)+"s";
-
-   f.appendChild(p);
+  f.appendChild(p);
  }
 
  const core=document.createElement("div");
@@ -133,59 +162,59 @@ function grow(x,y){
  reveal();
 }
 
-function reveal(){
+/* Story progression */
 
- if(count===8){
-   msg.innerText=
-   "A flower for every way you make my life better 🌷";
- }
+function reveal(){
+ if(count===4)
+  msg.innerText="Every flower is a reason I adore you 🌹";
+
+ if(count===8)
+  msg.innerText="You make my world softer and I love you brighter ✨";
+
+ if(count===12)
+  msg.innerText="This is a garden of rose for my rosy darling";
 
  if(count===15){
-   msg.innerText=
-   "And I’d grow a thousand more, just for you ❤️";
- }
-
- if(count===20){
-   petalStorm();
-   finalNote();
+  petalStorm();
+  finalNote();
  }
 }
 
-/* PETAL STORM */
+/* Petal storm */
 
 function petalStorm(){
- for(let i=0;i<120;i++){
-   const p=document.createElement("div");
-   p.innerText="🌸";
-   p.style.position="fixed";
-   p.style.left=Math.random()*100+"vw";
-   p.style.top="-10px";
-   p.style.fontSize=(14+Math.random()*20)+"px";
-   p.style.animation=
-     `fall ${3+Math.random()*3}s linear forwards`;
-   document.body.appendChild(p);
+ for(let i=0;i<140;i++){
+  const p=document.createElement("div");
+  p.innerText="🌸";
+  p.style.position="fixed";
+  p.style.left=Math.random()*100+"vw";
+  p.style.top="-10px";
+  p.style.fontSize=(12+Math.random()*20)+"px";
+  p.style.animation=
+   `fall ${3+Math.random()*3}s linear forwards`;
+  document.body.appendChild(p);
  }
 }
 
-/* FINAL NOTE */
+/* Final note */
 
 function finalNote(){
  const note=document.createElement("div");
- note.innerText="Happy फूल for my Beautiful ❤️";
+ note.innerText="फूल for my Beautiful️";
  note.style.position="fixed";
  note.style.top="50%";
  note.style.left="50%";
  note.style.transform="translate(-50%,-50%)";
- note.style.fontSize="28px";
- note.style.color="gold";
+ note.style.fontSize="40px";
+ note.style.color="B53693";
  note.style.textAlign="center";
- note.style.opacity=0;
+ note.style.opacity=100;
  note.style.transition="1s";
  note.style.zIndex=10;
 
  document.body.appendChild(note);
 
- setTimeout(()=>{note.style.opacity=1;},300);
+ setTimeout(()=>note.style.opacity=1,400);
 }
 </script>
 
