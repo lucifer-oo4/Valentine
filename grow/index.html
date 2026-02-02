@@ -1,83 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grow Your Flowers 🌷</title>
+<title>For You 🌹</title>
 
 <style>
 body{
   margin:0;
   height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
   background:linear-gradient(#0f0f14,#1c1c2b);
+  overflow:hidden;
   font-family:monospace;
   color:white;
-  overflow:hidden;
   text-align:center;
 }
 
-h2{
-  margin:20px;
+#msg{
+  position:fixed;
+  top:20px;
+  width:100%;
   opacity:.9;
-}
-
-/* BOUQUET AREA */
-
-.bouquet{
-  display:flex;
-  align-items:flex-end;
-  gap:30px;
-  flex-wrap:wrap;
-  justify-content:center;
-  max-width:90%;
-  min-height:220px;
+  z-index:5;
 }
 
 /* STEM */
 
 .flower{
-  position:relative;
-  width:16px;
-  height:180px;
+  position:absolute;
+  width:10px;
+  height:150px;
   background:linear-gradient(#2e7d32,#1b5e20);
-  border-radius:10px;
-  transform-origin:bottom;
-  animation:sway 4s ease-in-out infinite;
-}
-
-@keyframes sway{
-  0%,100%{ transform:rotate(-3deg);}
-  50%{ transform:rotate(3deg);}
+  border-radius:5px;
 }
 
 /* PETALS */
 
 .petal{
   position:absolute;
-  width:55px;
-  height:55px;
+  width:50px;
+  height:50px;
   border-radius:50%;
   opacity:0;
   transform:scale(0);
-  animation:bloom .8s forwards;
-}
-
-/* CENTER */
-
-.center{
-  position:absolute;
-  width:22px;
-  height:22px;
-  background:gold;
-  border-radius:50%;
-  top:-5px;
-  left:-3px;
-  opacity:0;
-  animation:bloom .8s forwards .3s;
+  animation:bloom .6s forwards;
 }
 
 @keyframes bloom{
@@ -87,70 +52,140 @@ h2{
   }
 }
 
-/* BUTTON */
+/* CENTER */
 
-button{
-  padding:12px 20px;
-  font-size:16px;
-  border:none;
-  border-radius:25px;
-  cursor:pointer;
-  background:#ff4d6d;
-  color:white;
+.core{
+  position:absolute;
+  width:24px;
+  height:24px;
+  background:radial-gradient(circle,#fff3b0,#ffb703);
+  border-radius:50%;
+  top:-8px;
+  left:-7px;
+  opacity:0;
+  animation:bloom .5s forwards .2s;
+}
+
+/* PETAL FALL */
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<h2>Tap to grow your bouquet 🌷</h2>
-
-<div class="bouquet" id="bouquet"></div>
-
-<button onclick="growFlower()">Grow a Flower</button>
+<div id="msg">Tap anywhere to grow roses 🌹</div>
 
 <script>
-const bouquet = document.getElementById("bouquet");
+let count=0;
+const msg=document.getElementById("msg");
 
-/* COLOR OPTIONS */
-
-const colors = [
-  ["#ff8fab","#fb6f92"], // pink
-  ["#cdb4db","#b185db"], // lavender
-  ["#ffd60a","#ffb703"]  // sunflower
+const colors=[
+ ["#ff4d6d","#c9184a"],
+ ["#ff8fab","#fb6f92"],
+ ["#cdb4db","#b185db"]
 ];
 
-function growFlower(){
+document.body.onclick=e=>{
+ grow(e.clientX,e.clientY);
+};
 
-  const color = colors[Math.floor(Math.random()*colors.length)];
+function grow(x,y){
 
-  const flower = document.createElement("div");
-  flower.className="flower";
+ const color=colors[Math.floor(Math.random()*colors.length)];
 
-  /* petals */
-  const positions = [
-    [-40,-20],
-    [-10,-45],
-    [-10,10],
-    [15,-20]
-  ];
+ const f=document.createElement("div");
+ f.className="flower";
+ f.style.left=(x-5)+"px";
+ f.style.top=(y-150)+"px";
 
-  positions.forEach((pos,i)=>{
-    const p=document.createElement("div");
-    p.className="petal";
-    p.style.top=pos[0]+"px";
-    p.style.left=pos[1]+"px";
-    p.style.background=`radial-gradient(circle,${color[0]},${color[1]})`;
-    p.style.animationDelay=(i*.15)+"s";
-    flower.appendChild(p);
-  });
+ const petals=8;
+ const radius=25;
 
-  /* center */
-  const c=document.createElement("div");
-  c.className="center";
-  flower.appendChild(c);
+ for(let i=0;i<petals;i++){
+   const p=document.createElement("div");
+   p.className="petal";
 
-  bouquet.appendChild(flower);
+   const angle=(i/petals)*360;
+   const rad=angle*Math.PI/180;
+
+   p.style.left=(Math.cos(rad)*radius-20)+"px";
+   p.style.top=(Math.sin(rad)*radius-40)+"px";
+   p.style.background=
+     `radial-gradient(circle,${color[0]},${color[1]})`;
+   p.style.animationDelay=(i*.05)+"s";
+
+   f.appendChild(p);
+ }
+
+ const core=document.createElement("div");
+ core.className="core";
+ f.appendChild(core);
+
+ document.body.appendChild(f);
+
+ count++;
+ reveal();
+}
+
+function reveal(){
+
+ if(count===8){
+   msg.innerText=
+   "A flower for every way you make my life better 🌷";
+ }
+
+ if(count===15){
+   msg.innerText=
+   "And I’d grow a thousand more, just for you ❤️";
+ }
+
+ if(count===20){
+   petalStorm();
+   finalNote();
+ }
+}
+
+/* PETAL STORM */
+
+function petalStorm(){
+ for(let i=0;i<120;i++){
+   const p=document.createElement("div");
+   p.innerText="🌸";
+   p.style.position="fixed";
+   p.style.left=Math.random()*100+"vw";
+   p.style.top="-10px";
+   p.style.fontSize=(14+Math.random()*20)+"px";
+   p.style.animation=
+     `fall ${3+Math.random()*3}s linear forwards`;
+   document.body.appendChild(p);
+ }
+}
+
+/* FINAL NOTE */
+
+function finalNote(){
+ const note=document.createElement("div");
+ note.innerText="Happy फूल for my Beautiful ❤️";
+ note.style.position="fixed";
+ note.style.top="50%";
+ note.style.left="50%";
+ note.style.transform="translate(-50%,-50%)";
+ note.style.fontSize="28px";
+ note.style.color="gold";
+ note.style.textAlign="center";
+ note.style.opacity=0;
+ note.style.transition="1s";
+ note.style.zIndex=10;
+
+ document.body.appendChild(note);
+
+ setTimeout(()=>{note.style.opacity=1;},300);
 }
 </script>
 
