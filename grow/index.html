@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grow Your Flowers 🌷</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(#0f0f14,#1c1c2b);
+  font-family:monospace;
+  color:white;
+  overflow:hidden;
+  text-align:center;
+}
+
+h2{
+  margin:20px;
+  opacity:.9;
+}
+
+/* BOUQUET AREA */
+
+.bouquet{
+  display:flex;
+  align-items:flex-end;
+  gap:30px;
+  flex-wrap:wrap;
+  justify-content:center;
+  max-width:90%;
+  min-height:220px;
+}
+
+/* STEM */
+
+.flower{
+  position:relative;
+  width:16px;
+  height:180px;
+  background:linear-gradient(#2e7d32,#1b5e20);
+  border-radius:10px;
+  transform-origin:bottom;
+  animation:sway 4s ease-in-out infinite;
+}
+
+@keyframes sway{
+  0%,100%{ transform:rotate(-3deg);}
+  50%{ transform:rotate(3deg);}
+}
+
+/* PETALS */
+
+.petal{
+  position:absolute;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  opacity:0;
+  transform:scale(0);
+  animation:bloom .8s forwards;
+}
+
+/* CENTER */
+
+.center{
+  position:absolute;
+  width:22px;
+  height:22px;
+  background:gold;
+  border-radius:50%;
+  top:-5px;
+  left:-3px;
+  opacity:0;
+  animation:bloom .8s forwards .3s;
+}
+
+@keyframes bloom{
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+/* BUTTON */
+
+button{
+  padding:12px 20px;
+  font-size:16px;
+  border:none;
+  border-radius:25px;
+  cursor:pointer;
+  background:#ff4d6d;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Tap to grow your bouquet 🌷</h2>
+
+<div class="bouquet" id="bouquet"></div>
+
+<button onclick="growFlower()">Grow a Flower</button>
+
+<script>
+const bouquet = document.getElementById("bouquet");
+
+/* COLOR OPTIONS */
+
+const colors = [
+  ["#ff8fab","#fb6f92"], // pink
+  ["#cdb4db","#b185db"], // lavender
+  ["#ffd60a","#ffb703"]  // sunflower
+];
+
+function growFlower(){
+
+  const color = colors[Math.floor(Math.random()*colors.length)];
+
+  const flower = document.createElement("div");
+  flower.className="flower";
+
+  /* petals */
+  const positions = [
+    [-40,-20],
+    [-10,-45],
+    [-10,10],
+    [15,-20]
+  ];
+
+  positions.forEach((pos,i)=>{
+    const p=document.createElement("div");
+    p.className="petal";
+    p.style.top=pos[0]+"px";
+    p.style.left=pos[1]+"px";
+    p.style.background=`radial-gradient(circle,${color[0]},${color[1]})`;
+    p.style.animationDelay=(i*.15)+"s";
+    flower.appendChild(p);
+  });
+
+  /* center */
+  const c=document.createElement("div");
+  c.className="center";
+  flower.appendChild(c);
+
+  bouquet.appendChild(flower);
+}
+</script>
+
+</body>
+</html>
