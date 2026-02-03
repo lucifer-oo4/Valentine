@@ -20,13 +20,13 @@ body{
   overflow:hidden;
 }
 
-/* WRAPPER (we scale THIS) */
+/* WRAPPER */
 .heart-wrap{
   cursor:pointer;
   transition:transform .25s ease;
 }
 
-/* HEART SHAPE */
+/* HEART */
 .heart{
   width:120px;
   height:120px;
@@ -69,6 +69,7 @@ body{
 
 /* TEXT */
 #hint{ margin-top:30px; opacity:.85; }
+
 #poem{
   display:none;
   max-width:90%;
@@ -76,7 +77,10 @@ body{
   line-height:1.6;
   margin-top:20px;
 }
+
+/* ✅ HIDDEN INITIALLY */
 #final{
+  display:none;
   margin-top:25px;
   font-size:28px;
   color:gold;
@@ -120,13 +124,17 @@ And everything in between,<br>
 Where our love quietly hides.
 </div>
 
-<div id="final">My Love, My Kins, Will you be my Valentine? ❤️</div>
+<div id="final">
+My Love, My Kins,<br>
+Will you be my Valentine? ❤️
+</div>
 
 <script>
 const wrap=document.getElementById("wrap");
 const heart=document.getElementById("heart");
 const hint=document.getElementById("hint");
 const poem=document.getElementById("poem");
+const final=document.getElementById("final");
 
 let clicks=0;
 
@@ -153,6 +161,7 @@ wrap.addEventListener("click",()=>{
 
 function showFinal(){
   poem.style.display="block";
+  final.style.display="block"; /* ✅ reveal here */
   confetti();
 }
 
