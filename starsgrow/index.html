@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Sky ✨</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:radial-gradient(circle at bottom,#020111,#000);
+  overflow:hidden;
+  font-family:monospace;
+  color:white;
+}
+
+/* Background stars */
+
+.bg-star{
+  position:absolute;
+  width:3px;
+  height:3px;
+  background:white;
+  border-radius:50%;
+  opacity:.6;
+  animation:twinkle 2.5s infinite alternate;
+}
+
+/* Clickable stars */
+
+.star{
+  position:absolute;
+  width:12px;
+  height:12px;
+  background:white;
+  border-radius:50%;
+  box-shadow:0 0 10px white;
+  cursor:pointer;
+  animation:twinkle 2s infinite alternate;
+  z-index:2;
+}
+
+/* Twinkle */
+
+@keyframes twinkle{
+  from{opacity:.4; transform:scale(.9);}
+  to{opacity:1; transform:scale(1.2);}
+}
+
+/* Golden bottom star */
+
+.special{
+  background:gold;
+  box-shadow:0 0 18px gold;
+  width:16px;
+  height:16px;
+}
+
+/* Red top star */
+
+.topstar{
+  background:red;
+  box-shadow:0 0 18px red;
+  width:16px;
+  height:16px;
+}
+
+/* Message bubble */
+
+#bubble{
+  position:fixed;
+  bottom:40px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,.7);
+  padding:12px 18px;
+  border-radius:20px;
+  font-size:16px;
+  opacity:0;
+  transition:.3s;
+  z-index:5;
+}
+
+/* Final message */
+
+#final{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:42px;
+  color:gold;
+  opacity:0;
+  transition:1s;
+  z-index:6;
+}
+</style>
+</head>
+
+<body>
+
+<div id="bubble"></div>
+<div id="final">I love you ❤️</div>
+
+<script>
+const messages=[
+"You and what you are to me...",
+"Your eyes are my favourite view",
+"You are my home my safezone",
+"You are the delicacy I love to devour",
+"Your hot body is the only heater I ever need",
+"Your laugh makes my world brighter",
+"You believe in me even when it all falls down",
+"You are my inspiration",
+"I adore you more than any moon or stars",
+"You are special, surreal and the only one I want ✨"
+];
+
+const songs=[
+"song1.mp3","song2.mp3","song3.mp3","song4.mp3","song5.mp3",
+"song6.mp3","song7.mp3","song8.mp3","song9.mp3","song10.mp3"
+];
+
+const bubble=document.getElementById("bubble");
+const final=document.getElementById("final");
+
+let currentAudio=null;
+
+/* Background stars */
+
+for(let i=0;i<120;i++){
+ let s=document.createElement("div");
+ s.className="bg-star";
+ s.style.top=Math.random()*100+"vh";
+ s.style.left=Math.random()*100+"vw";
+ s.style.animationDuration=(2+Math.random()*3)+"s";
+ document.body.appendChild(s);
+}
+
+/* ⭐ Fixed RED top star (message 0) */
+
+let topStar=document.createElement("div");
+topStar.className="star topstar";
+topStar.style.top="20px";
+topStar.style.left="50%";
+topStar.style.transform="translateX(-50%)";
+topStar.onclick=()=>handleStar(0);
+document.body.appendChild(topStar);
+
+/* ⭐ Other stars */
+
+for(let i=1;i<10;i++){
+
+ let star=document.createElement("div");
+ star.className="star";
+
+ if(i===9){
+   star.classList.add("special");
+   star.style.bottom="20px";
+   star.style.left="50%";
+   star.style.transform="translateX(-50%)";
+ } else {
+   star.style.top=Math.random()*75+"vh";
+   star.style.left=Math.random()*95+"vw";
+ }
+
+ star.onclick=()=>handleStar(i);
+ document.body.appendChild(star);
+}
+
+/* Handle click */
+
+function handleStar(i){
+ showMessage(i);
+ playSong(i);
+
+ if(i===9){
+   final.style.opacity=1;
+ }
+}
+
+/* Show message */
+
+function showMessage(i){
+ bubble.innerText=messages[i];
+ bubble.style.opacity=1;
+}
+
+/* Play song */
+
+function playSong(i){
+ if(currentAudio){ currentAudio.pause(); }
+ currentAudio=new Audio(songs[i]);
+ currentAudio.currentTime=0;
+ currentAudio.play();
+}
+</script>
+
+</body>
+</html>
