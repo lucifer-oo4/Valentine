@@ -127,7 +127,7 @@ I want you to be with me my love, from the darkest times, the good vibes,<br>
 And everything in between,<br>
 Where our love quietly hides.
 </div>
-
+<audio id="song" src="song.mp3"></audio>
 <div id="final">
 My Love, My Kins,<br>
 Will you be my Valentine? ❤️
@@ -165,9 +165,14 @@ wrap.addEventListener("click",()=>{
 
 function showFinal(){
   poem.style.display="block";
-  final.style.display="block"; /* ✅ reveal here */
+  final.style.display="block";
   confetti();
+
+  const song = document.getElementById("song");
+  song.currentTime = 0;
+  song.play();
 }
+
 
 function confetti(){
   const emojis=["❤️","💖","💛","✨"];
